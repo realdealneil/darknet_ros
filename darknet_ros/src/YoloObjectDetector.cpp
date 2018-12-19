@@ -58,6 +58,8 @@ bool YoloObjectDetector::readParameters()
   nodeHandle_.param("image_view/enable_opencv", viewImage_, true);
   nodeHandle_.param("image_view/wait_key_delay", waitKeyDelay_, 3);
   nodeHandle_.param("image_view/enable_console_output", enableConsoleOutput_, false);
+  nodeHandle_.param("image_view/frame_wait_time", frameWaitTime_, 33.0); // milliseconds
+  
 
   // Check if Xserver is running on Linux.
   if (XOpenDisplay(NULL)) {
@@ -530,7 +532,9 @@ void YoloObjectDetector::yolo()
   demoTime_ = what_time_is_it_now();
 
   while (!demoDone_) {
+    double startLoopTime = what_time_is_it_now();
     buffIndex_ = (buffIndex_ + 1) % 3;
+    
     fetch_thread = std::thread(&YoloObjectDetector::fetchInThread, this);
     detect_thread = std::thread(&YoloObjectDetector::detectInThread, this);
     if (!demoPrefix_) {
@@ -548,6 +552,14 @@ void YoloObjectDetector::yolo()
     fetch_thread.join();
     detect_thread.join();
     ++count;
+    
+    double endLoopTime = what_time_is_it_now();
+    double loopTime = endLoopTime - startLoopTime;
+    if (loopTime < frameWaitTime_) {
+        double waitTime = frameWaitTime_ - loopTime;
+        std::this_thread::sleep_for(std::chrono::milliseconds((int)waitTime));
+    }
+    
     if (!isNodeRunning()) {
       demoDone_ = true;
     }
