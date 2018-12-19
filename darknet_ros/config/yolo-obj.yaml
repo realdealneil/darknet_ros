@@ -1,0 +1,26 @@
+yolo_model:
+
+  config_file:
+    name: yolo-obj.cfg
+  weight_file:
+    name: yolo-obj_24200.weights
+  threshold:
+    value: 0.3
+  detection_classes:
+    names:
+      - fire_extinguisher
+      - valve
+      - backpack
+      - toolbox
+      - junction
+      - dead_end
+      - radio
+      - electrical_box
+      - duct
+      - phone
+      - survivor
+      - ingress
+      - egress
+      - tent
+      - barrier
+      - vertical_shaft
