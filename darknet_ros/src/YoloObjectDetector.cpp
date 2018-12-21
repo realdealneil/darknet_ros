@@ -421,25 +421,61 @@ void *YoloObjectDetector::fetchInThread()
   return 0;
 }
 
+static float get_pixel(image m, int x, int y, int c)
+{
+    assert(x < m.w && y < m.h && c < m.c);
+    return m.data[c*m.h*m.w + y*m.w + x];
+}
+
+void fill_debug_img(image p, const char *name, IplImage *disp)
+{
+    int x,y,k;
+    if(p.c == 3) rgbgr_image(p);
+    //normalize_image(copy);
+
+    char buff[256];
+    //sprintf(buff, "%s (%d)", name, windows);
+    sprintf(buff, "%s", name);
+
+    int step = disp->widthStep;
+    //cvNamedWindow(buff, CV_WINDOW_NORMAL); 
+    //cvMoveWindow(buff, 100*(windows%10) + 200*(windows/10), 100*(windows%10));
+    //++windows;
+    for(y = 0; y < p.h; ++y){
+        for(x = 0; x < p.w; ++x){
+            for(k= 0; k < p.c; ++k){
+                disp->imageData[y*step + x*p.c + k] = (unsigned char)(get_pixel(p,x,y,k)*255);
+            }
+        }
+    }
+}
+
 void *YoloObjectDetector::displayInThread(void *ptr)
 {
-  show_image_cv(buff_[(buffIndex_ + 1)%3], "YOLO V3", ipl_);
-  int c = cvWaitKey(waitKeyDelay_);
-  if (c != -1) c = c%256;
-  if (c == 27) {
-      demoDone_ = 1;
-      return 0;
-  } else if (c == 82) {
-      demoThresh_ += .02;
-  } else if (c == 84) {
-      demoThresh_ -= .02;
-      if(demoThresh_ <= .02) demoThresh_ = .02;
-  } else if (c == 83) {
-      demoHier_ += .02;
-  } else if (c == 81) {
-      demoHier_ -= .02;
-      if(demoHier_ <= .0) demoHier_ = .0;
-  }
+	
+	if (viewImage_) {
+		show_image_cv(buff_[(buffIndex_ + 1)%3], "YOLO V3", ipl_);
+		int c = cvWaitKey(waitKeyDelay_);
+		if (c != -1) c = c%256;
+		if (c == 27) {
+		  demoDone_ = 1;
+		  return 0;
+		} else if (c == 82) {
+		  demoThresh_ += .02;
+		} else if (c == 84) {
+		  demoThresh_ -= .02;
+		  if(demoThresh_ <= .02) demoThresh_ = .02;
+		} else if (c == 83) {
+		  demoHier_ += .02;
+		} else if (c == 81) {
+		  demoHier_ -= .02;
+		  if(demoHier_ <= .0) demoHier_ = .0;
+		}
+	} else {
+		fill_debug_img(buff_[(buffIndex_ + 1)%3], "YOLO V3", ipl_);
+	}
+		
+  
   return 0;
 }
 
@@ -540,9 +576,7 @@ void YoloObjectDetector::yolo()
     if (!demoPrefix_) {
       fps_ = 1./(what_time_is_it_now() - demoTime_);
       demoTime_ = what_time_is_it_now();
-      if (viewImage_) {
-        displayInThread(0);
-      }
+      displayInThread(0);
       publishInThread();
     } else {
       char name[256];
