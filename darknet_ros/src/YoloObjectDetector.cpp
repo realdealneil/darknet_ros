@@ -349,7 +349,7 @@ void *YoloObjectDetector::detectInThread()
     printf("Objects:\n\n");
   }
   image display = buff_[(buffIndex_+2) % 3];
-  draw_detections(display, dets, nboxes, demoThresh_, demoNames_, demoAlphabet_, demoClasses_);
+  draw_detections(display, dets, nboxes, demoThresh_, demoNames_, demoAlphabet_, demoClasses_, enableConsoleOutput_);
 
   // extract the bounding boxes and send them to ROS
   int i, j;
@@ -427,20 +427,12 @@ static float get_pixel(image m, int x, int y, int c)
     return m.data[c*m.h*m.w + y*m.w + x];
 }
 
-void fill_debug_img(image p, const char *name, IplImage *disp)
+void fill_debug_img(image p, IplImage *disp)
 {
     int x,y,k;
     if(p.c == 3) rgbgr_image(p);
-    //normalize_image(copy);
-
-    char buff[256];
-    //sprintf(buff, "%s (%d)", name, windows);
-    sprintf(buff, "%s", name);
 
     int step = disp->widthStep;
-    //cvNamedWindow(buff, CV_WINDOW_NORMAL); 
-    //cvMoveWindow(buff, 100*(windows%10) + 200*(windows/10), 100*(windows%10));
-    //++windows;
     for(y = 0; y < p.h; ++y){
         for(x = 0; x < p.w; ++x){
             for(k= 0; k < p.c; ++k){
@@ -472,7 +464,7 @@ void *YoloObjectDetector::displayInThread(void *ptr)
 		  if(demoHier_ <= .0) demoHier_ = .0;
 		}
 	} else {
-		fill_debug_img(buff_[(buffIndex_ + 1)%3], "YOLO V3", ipl_);
+		fill_debug_img(buff_[(buffIndex_ + 1)%3], ipl_);
 	}
 		
   

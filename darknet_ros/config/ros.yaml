@@ -30,5 +30,5 @@ image_view:
 
   enable_opencv: false
   wait_key_delay: 1
-  enable_console_output: true
+  enable_console_output: false
   frame_wait_time: 100.0
