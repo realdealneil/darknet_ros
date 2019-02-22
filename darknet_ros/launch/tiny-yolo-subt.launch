@@ -4,6 +4,7 @@
 	
   <!-- The robot_namespace allows us to have yolo nodes running for multiple vehicles -->
   <arg name="robot_namespace" default="X1" />
+  <arg name="camera_topic" default="/X1/front/image_raw" />
   
   <!-- Console launch prefix -->
   <arg name="launch_prefix" default=""/>
@@ -20,7 +21,7 @@
   <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros" output="screen" ns="$(arg robot_namespace)" launch-prefix="$(arg launch_prefix)">
     <param name="weights_path"          value="$(arg yolo_weights_path)" />
     <param name="config_path"           value="$(arg yolo_config_path)" />    
-    <param name="subscribers/camera_reading/topic" value="/$(arg robot_namespace)/front/image_raw" />
+    <param name="subscribers/camera_reading/topic" value="/$(arg camera_topic)" />
     
     <!-- Reconfigure the publishers to use the namespace as well... This should be done a more standard way, but oh well -->
     <param name="publishers/object_detector/topic" value="/$(arg robot_namespace)/darknet_ros/found_object" />
