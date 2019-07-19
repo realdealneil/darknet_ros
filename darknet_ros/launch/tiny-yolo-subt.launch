@@ -15,10 +15,10 @@
 
   <!-- Load parameters -->
   <rosparam command="load" ns="$(arg robot_namespace)/darknet_ros" file="$(find darknet_ros)/config/ros.yaml"/>
-  <rosparam command="load" ns="$(arg robot_namespace)/darknet_ros" file="$(find darknet_ros)/config/yolov3-tiny-subt.yaml"/>
+  <rosparam command="load" ns="$(arg robot_namespace)/darknet_ros" file="$(find darknet_ros)/config/yolov3-tiny-ign-sim.yaml"/>
 
   <!-- Start darknet and ros wrapper  ns="$(arg robot_namespace)"  -->
-  <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros" output="screen" ns="$(arg robot_namespace)" launch-prefix="$(arg launch_prefix)">
+  <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros" output="screen" ns="$(arg robot_namespace)" launch-prefix="$(arg launch_prefix)" required="true">
     <param name="weights_path"          value="$(arg yolo_weights_path)" />
     <param name="config_path"           value="$(arg yolo_config_path)" />    
     <param name="subscribers/camera_reading/topic" value="/$(arg camera_topic)" />
