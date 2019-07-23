@@ -3,7 +3,7 @@ yolo_model:
   config_file:
     name: ignition_sim.cfg
   weight_file:
-    name: ignition_sim_18000.weights
+    name: ignition_sim_3400.weights
   threshold:
     value: 0.25
   detection_classes:
