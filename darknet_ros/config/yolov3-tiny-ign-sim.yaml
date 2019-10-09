@@ -1,11 +1,11 @@
 yolo_model:
 
   config_file:
-    name: ignition_sim.cfg
+    name: ignition_sim_extended.cfg
   weight_file:
-    name: ignition_sim_3400.weights
+    name: ignition_sim_extended_4800.weights
   threshold:
-    value: 0.25
+    value: 0.3
   detection_classes:
     names:
       - person
@@ -16,3 +16,4 @@ yolo_model:
       - ingress
       - multirotor
       - ugv
+      - vertical_shaft
