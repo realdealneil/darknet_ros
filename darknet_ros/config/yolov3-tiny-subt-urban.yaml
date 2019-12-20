@@ -1,9 +1,9 @@
 yolo_model:
 
   config_file:
-    name: yolov3-tiny-subt_18classes.cfg
+    name: yolov3-tiny-urban.cfg
   weight_file:
-    name: yolov3-tiny-subt_18classes_20700.weights
+    name: yolov3-tiny-urban_4000.weights
   threshold:
     value: 0.3
   detection_classes:
