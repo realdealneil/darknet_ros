@@ -1,9 +1,9 @@
 yolo_model:
 
   config_file:
-    name: yolov3-tiny-urban.cfg
+    name: yolov3-tiny-cave.cfg
   weight_file:
-    name: yolov3-tiny-cave_3000.weights
+    name: yolov3-tiny-cave_3300.weights
   threshold:
     value: 0.3
   detection_classes:
